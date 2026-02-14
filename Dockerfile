@@ -1,13 +1,13 @@
-# Dockerfile for building flex (Fast Lexical Analyzer) from source
+# Dockerfile para construir Flex desde código fuente
 # https://github.com/westes/flex
 
 FROM ubuntu:22.04
 
-# Avoid interactive prompts during package installation
+# Evitar prompts interactivos durante instalación de paquetes
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install build dependencies
-# Note: flex is needed to bootstrap building flex from source
+# Instalar dependencias de compilación
+# Nota: flex es necesario para bootstrap al compilar desde fuente
 RUN apt-get update && apt-get install -y \
     git \
     build-essential \
@@ -23,23 +23,23 @@ RUN apt-get update && apt-get install -y \
     help2man \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone the flex repository
+# Clonar el repositorio de flex
 WORKDIR /opt
 RUN git clone https://github.com/westes/flex.git
 
-# Build flex from source
-# Note: DO NOT use parallel make (-j) - it causes race conditions during bootstrap
+# Compilar flex desde fuente
+# Nota: NO usar make paralelo (-j) - causa condiciones de carrera durante bootstrap
 WORKDIR /opt/flex
 RUN ./autogen.sh \
     && ./configure --prefix=/usr/local \
     && make \
     && make install
 
-# Verify installation
+# Verificar instalación
 RUN flex --version
 
-# Set up working directory for user files
+# Configurar directorio de trabajo para archivos del usuario
 WORKDIR /workspace
 
-# Keep container running for interactive use
+# Mantener contenedor ejecutándose para uso interactivo
 CMD ["sleep", "infinity"]

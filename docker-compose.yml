@@ -1,10 +1,11 @@
 services:
   flex:
+    container_name: flex_container
     build: .
     volumes:
-      # Mount current directory to /workspace for your .l files
+      # Montar directorio actual a /workspace para archivos .l
       - ./workspace:/workspace
     working_dir: /workspace
-    # Override command to keep container running for interactive use
+    # Mantener contenedor ejecutándose para uso interactivo
     stdin_open: true
     tty: true
