@@ -1,5 +1,7 @@
 # Actividad: Comprendiendo un generador sintáctico
 
+[Repo](https://github.com/skemono/Flex_Setup/blob/Yacc/RESPUESTAS.md)
+
 ## Inciso 1 — Significado de [TOKEN] y [PARSE]
 
 Al ejecutar `./parser < test_valid.input` se observan dos tipos de líneas:
