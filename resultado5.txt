@@ -1,0 +1,39 @@
+root@e1d4d3571651:/workspace/examples# ./parser < test_modpow.input
+=== Python Parser (Flex + YACC) ===
+
+  [TOKEN] ID         -> 'a'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '10'
+  [TOKEN] MOD        -> '%'
+  [TOKEN] NUMBER     -> '3'
+  [PARSE] Modulo
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'b'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] POW        -> '**'
+  [TOKEN] NUMBER     -> '8'
+  [PARSE] Exponentiation
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'c'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '10'
+  [TOKEN] MOD        -> '%'
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] PLUS       -> '+'
+  [PARSE] Modulo
+  [TOKEN] NUMBER     -> '2'
+  [PARSE] Addition
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'd'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] POW        -> '**'
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] POW        -> '**'
+  [TOKEN] NUMBER     -> '2'
+  [PARSE] Exponentiation
+  [PARSE] Exponentiation
+  [PARSE] Assignment
+
+[OK] Input parsed successfully — no syntax errors.

@@ -1,0 +1,36 @@
+root@e1d4d3571651:/workspace/examples# ./parser < test_lists.input
+=== Python Parser (Flex + YACC) ===
+
+  [TOKEN] ID         -> 'empty'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] Empty list
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'nums'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] NUMBER     -> '1'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] List
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'nested'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] NUMBER     -> '1'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] List
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] List
+  [PARSE] Assignment
+
+[OK] Input parsed successfully — no syntax errors.

@@ -1,38 +1,40 @@
 # Python Parser — Flex + YACC
 
-Extends the Python scanner with a **YACC grammar** that validates syntax and reports errors with line numbers.
+# [Ver respuestas de la actividad → RESPUESTAS.md](./RESPUESTAS.md)
 
 ## Files
 
-| File               | Role                                                              |
-| ------------------ | ----------------------------------------------------------------- |
-| `python_parser.l`  | Flex lexer — prints tokens **and** returns codes to YACC          |
-| `python_parser.y`  | YACC grammar — defines valid syntax, calls `yyerror` on bad input |
-| `test_valid.input` | Valid input (parses cleanly)                                      |
-| `test_error.input` | Input with a syntax error on line 2                               |
+| File                  | Role                                                              |
+| --------------------- | ----------------------------------------------------------------- |
+| `python_parser.l`     | Flex lexer — prints tokens and returns codes to YACC              |
+| `python_parser.y`     | YACC grammar — defines valid syntax, calls `yyerror` on bad input |
+| `test_valid.input`    | Input válido (parsea sin errores)                                 |
+| `test_error.input`    | Input con error de sintaxis en línea 2                            |
+| `test_modpow.input`   | Pruebas de módulo `%` y exponenciación `**`                       |
+| `test_lists.input`    | Pruebas de listas `[...]`                                         |
 
 ## How to Build
 
 ```bash
-# 1. Enter the container
+# 1. Entrar al contenedor
 docker compose exec flex bash
 cd /workspace/examples
 
-# 2. Generate C files
-yacc -d python_parser.y    # produces y.tab.c and y.tab.h
-flex python_parser.l       # produces lex.yy.c
+# 2. Generar archivos C
+yacc -d python_parser.y
+flex python_parser.l
 
-# 3. Compile
+# 3. Compilar
 gcc y.tab.c lex.yy.c -o parser
 ```
 
-## Running — valid input
+---
+
+## Resultado 1 — Input válido
 
 ```bash
 ./parser < test_valid.input
 ```
-
-Expected output:
 
 ```
 === Python Parser (Flex + YACC) ===
@@ -41,24 +43,50 @@ Expected output:
   [TOKEN] ASSIGN     -> '='
   [TOKEN] NUMBER     -> '5'
   [PARSE] Assignment
-  ...
+  [TOKEN] ID         -> 'y'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] ID         -> 'x'
+  [TOKEN] PLUS       -> '+'
+  [TOKEN] NUMBER     -> '3'
+  [PARSE] Addition
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'z'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LPAREN     -> '('
+  [TOKEN] ID         -> 'x'
+  [TOKEN] PLUS       -> '+'
+  [TOKEN] ID         -> 'y'
+  [TOKEN] RPAREN     -> ')'
+  [PARSE] Addition
+  [TOKEN] TIMES      -> '*'
+  [TOKEN] NUMBER     -> '2'
+  [PARSE] Multiplication
+  [PARSE] Assignment
   [TOKEN] DEF        -> 'def'
   [TOKEN] ID         -> 'add'
-  ...
+  [TOKEN] LPAREN     -> '('
+  [TOKEN] ID         -> 'a'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] ID         -> 'b'
+  [TOKEN] RPAREN     -> ')'
+  [TOKEN] COLON      -> ':'
   [PARSE] Function definition
+  [TOKEN] ID         -> 'result'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] ID         -> 'a'
+  [TOKEN] PLUS       -> '+'
+  [TOKEN] ID         -> 'b'
+  [PARSE] Addition
+  [PARSE] Assignment
 
 [OK] Input parsed successfully — no syntax errors.
 ```
 
-## Running — input with a syntax error
+## Resultado 1 — Input con error de sintaxis
 
 ```bash
 ./parser < test_error.input
 ```
-
-`test_error.input` contains `y = * 3` on line 2 — a `*` where an expression is expected.
-
-Expected output:
 
 ```
 === Python Parser (Flex + YACC) ===
@@ -76,17 +104,117 @@ Expected output:
 [FAIL] Parsing stopped due to syntax error(s).
 ```
 
-## Grammar summary
+---
+
+## Resultado 5 — Módulo y exponenciación
+
+```bash
+./parser < test_modpow.input
+```
 
 ```
-program       → statement+
-statement     → ID = expr NEWLINE
-              | expr NEWLINE
-              | def ID ( params ) : NEWLINE
-              | NEWLINE
-expr          → expr + term | expr - term | term
-term          → term * factor | term / factor | factor
-factor        → ID | NUMBER | ( expr )
+=== Python Parser (Flex + YACC) ===
+
+  [TOKEN] ID         -> 'a'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '10'
+  [TOKEN] MOD        -> '%'
+  [TOKEN] NUMBER     -> '3'
+  [PARSE] Modulo
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'b'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] POW        -> '**'
+  [TOKEN] NUMBER     -> '8'
+  [PARSE] Exponentiation
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'c'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '10'
+  [TOKEN] MOD        -> '%'
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] PLUS       -> '+'
+  [PARSE] Modulo
+  [TOKEN] NUMBER     -> '2'
+  [PARSE] Addition
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'd'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] POW        -> '**'
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] POW        -> '**'
+  [TOKEN] NUMBER     -> '2'
+  [PARSE] Exponentiation
+  [PARSE] Exponentiation
+  [PARSE] Assignment
+
+[OK] Input parsed successfully — no syntax errors.
+```
+
+---
+
+## Resultado 6 — Listas
+
+```bash
+./parser < test_lists.input
+```
+
+```
+=== Python Parser (Flex + YACC) ===
+
+  [TOKEN] ID         -> 'empty'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] Empty list
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'nums'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] NUMBER     -> '1'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] List
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'nested'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] NUMBER     -> '1'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] LBRACKET   -> '['
+  [TOKEN] NUMBER     -> '2'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] NUMBER     -> '3'
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] List
+  [TOKEN] RBRACKET   -> ']'
+  [PARSE] List
+  [PARSE] Assignment
+
+[OK] Input parsed successfully — no syntax errors.
+```
+
+---
+
+## Grammar
+
+```
+program     → statement+
+statement   → ID = expr NEWLINE
+            | expr NEWLINE
+            | def ID ( params ) : NEWLINE
+            | NEWLINE
+expr        → expr + term | expr - term | term
+term        → term * power | term / power | term % power | power
+power       → factor ** power | factor
+factor      → ID | NUMBER | ( expr ) | list
+list        → [ ] | [ expr_list ]
+expr_list   → expr | expr_list , expr
 ```
 
 ## Key YACC variables / functions
@@ -98,4 +226,5 @@ factor        → ID | NUMBER | ( expr )
 | `yyerror(msg)` | Called on syntax error; receives the error message      |
 | `%token`       | Declares terminal symbols shared between `.y` and `.l`  |
 | `%left`        | Declares left-associative operators (sets precedence)   |
+| `%right`       | Declares right-associative operators (e.g. `**`)        |
 | `yacc -d`      | Generates `y.tab.h` so the lexer knows the token codes  |

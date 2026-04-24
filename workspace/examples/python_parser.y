@@ -3,19 +3,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern int line;       /* current line, tracked in the lexer */
+extern int line;
 extern int yylex();
 void yyerror(const char* msg);
 %}
 
 %token DEF RETURN IF ELSE
 %token ID NUMBER
-%token PLUS MINUS TIMES DIVIDE ASSIGN
+%token PLUS MINUS TIMES DIVIDE MOD POW ASSIGN
 %token LPAREN RPAREN COMMA COLON
+%token LBRACKET RBRACKET
 %token NEWLINE
 
-%left PLUS MINUS
-%left TIMES DIVIDE
+%left  PLUS MINUS
+%left  TIMES DIVIDE MOD
+%right POW
 
 %%
 
@@ -32,7 +34,7 @@ statement
     : ID ASSIGN expr NEWLINE   { printf("  [PARSE] Assignment\n"); }
     | expr NEWLINE             { printf("  [PARSE] Expression statement\n"); }
     | func_def
-    | NEWLINE                  { /* blank line – ignore */ }
+    | NEWLINE                  { }
     ;
 
 func_def
@@ -57,8 +59,14 @@ expr
     ;
 
 term
-    : term TIMES  factor       { printf("  [PARSE] Multiplication\n"); }
-    | term DIVIDE factor       { printf("  [PARSE] Division\n"); }
+    : term TIMES  power        { printf("  [PARSE] Multiplication\n"); }
+    | term DIVIDE power        { printf("  [PARSE] Division\n"); }
+    | term MOD    power        { printf("  [PARSE] Modulo\n"); }
+    | power
+    ;
+
+power
+    : factor POW power         { printf("  [PARSE] Exponentiation\n"); }
     | factor
     ;
 
@@ -66,11 +74,20 @@ factor
     : ID
     | NUMBER
     | LPAREN expr RPAREN
+    | list
+    ;
+
+list
+    : LBRACKET RBRACKET                 { printf("  [PARSE] Empty list\n"); }
+    | LBRACKET expr_list RBRACKET       { printf("  [PARSE] List\n"); }
+    ;
+
+expr_list
+    : expr
+    | expr_list COMMA expr
     ;
 
 %%
-
-/* ── Support functions ───────────────────────────────────────────────────── */
 
 void yyerror(const char* msg) {
     fprintf(stderr, "\n  [SYNTAX ERROR] %s at line %d\n", msg, line);

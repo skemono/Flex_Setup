@@ -1,0 +1,64 @@
+root@e1d4d3571651:/workspace/examples# ./parser < test_valid.input
+=== Python Parser (Flex + YACC) ===
+
+  [TOKEN] ID         -> 'x'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '5'
+' at line 1ROR] Unknown character '
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'y'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] ID         -> 'x'
+  [TOKEN] PLUS       -> '+'
+  [TOKEN] NUMBER     -> '3'
+' at line 2ROR] Unknown character '
+  [PARSE] Addition
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'z'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] LPAREN     -> '('
+  [TOKEN] ID         -> 'x'
+  [TOKEN] PLUS       -> '+'
+  [TOKEN] ID         -> 'y'
+  [TOKEN] RPAREN     -> ')'
+  [PARSE] Addition
+  [TOKEN] TIMES      -> '*'
+  [TOKEN] NUMBER     -> '2'
+' at line 3ROR] Unknown character '
+  [PARSE] Multiplication
+  [PARSE] Assignment
+  [TOKEN] DEF        -> 'def'
+  [TOKEN] ID         -> 'add'
+  [TOKEN] LPAREN     -> '('
+  [TOKEN] ID         -> 'a'
+  [TOKEN] COMMA      -> ','
+  [TOKEN] ID         -> 'b'
+  [TOKEN] RPAREN     -> ')'
+  [TOKEN] COLON      -> ':'
+' at line 4ROR] Unknown character '
+  [PARSE] Function definition
+  [TOKEN] ID         -> 'result'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] ID         -> 'a'
+  [TOKEN] PLUS       -> '+'
+  [TOKEN] ID         -> 'b'
+' at line 5ROR] Unknown character '
+  [PARSE] Addition
+  [PARSE] Assignment
+
+[OK] Input parsed successfully — no syntax errors.
+root@e1d4d3571651:/workspace/examples# ./parser < test_error.input
+=== Python Parser (Flex + YACC) ===
+
+  [TOKEN] ID         -> 'x'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] NUMBER     -> '5'
+' at line 1ROR] Unknown character '
+  [PARSE] Assignment
+  [TOKEN] ID         -> 'y'
+  [TOKEN] ASSIGN     -> '='
+  [TOKEN] TIMES      -> '*'
+
+  [SYNTAX ERROR] syntax error at line 2
+
+[FAIL] Parsing stopped due to syntax error(s).
